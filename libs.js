@@ -16,7 +16,7 @@ module.exports = {
       const isDir = fs.statSync(fixedDir).isDirectory();
 
       if (isDir) {
-        const listDirs = recursiveGetDirectories(fixedDir);
+        const listDirs = this.recursiveGetDirectories(fixedDir);
 
         for (j of listDirs) {
           dirs.push(j);
