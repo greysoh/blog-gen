@@ -1,0 +1,66 @@
+const fs = require("fs");
+
+const prettier = require("prettier");
+
+const libs = require("./libs");
+const markdown = require("./markdown");
+
+const directory = process.argv[2] || "in";
+
+console.log("DirectoryInit: Attempting to delete 'out' directory...");
+libs.forceRecursiveDelete("out");
+
+console.log(
+  "DirectoryInit: Attempting to clone '" + directory + "' to 'out' directory..."
+);
+
+libs.cloneDirectory(directory, "out");
+
+console.log("DirectoryInit: Checking for a template file...");
+
+if (!fs.existsSync("out/template.html")) {
+  console.log(
+    "DirectoryInit: No template file found. Attempting to create one..."
+  );
+  fs.writeFileSync(
+    "out/template.html",
+    "<!DOCTYPE html>\n\n<span>No template specified! Please be sure to make one by making a 'template.html' file.</span>\n<br>Follow this example on how to make one.</span>\n<br><br>\n<md></md>"
+  );
+}
+
+console.log("DirectoryInit: Reading template file...");
+const template = fs.readFileSync("out/template.html", "utf8");
+
+const files = libs.recursiveGetDirectories("out");
+
+console.log(
+  "Convert: (REMINDER) If you are planning to use code highlighting, you must add a 'highlight.js' theme css file to the 'template.html' file."
+);
+
+for (i of files) {
+  if (i.endsWith(".md")) {
+    console.log("Convert: Attempting to convert '" + i + "' to HTML...");
+    const file = fs.readFileSync(i, "utf8");
+
+    const html = markdown.render(file);
+    console.log("Convert: Building template...");
+    let newHTML = template.replaceAll("<md>", html).replaceAll("</md>", "");
+
+    console.log("Convert: Running post-processing (prettier)...");
+
+    newHTML = prettier.format(newHTML, {
+      parser: "html",
+    });
+
+    console.log("Convert: Writing '" + i + "' to HTML...");
+    fs.writeFileSync(i.replace(".md", ".html"), newHTML);
+
+    console.log("Convert: Deleting '" + i + "'...");
+    fs.rmSync(i);
+  }
+}
+
+console.log("DirectoryInit: Cleaning up...");
+fs.rmSync("out/template.html");
+
+console.log("DirectoryInit: Done!");

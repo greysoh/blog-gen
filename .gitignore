@@ -1,0 +1,12 @@
+# Output
+out
+
+# NodeJS bs 
+package-lock.json
+yarn.lock
+node_modules
+
+# Other
+.DS_Store
+.env
+.env*
