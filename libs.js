@@ -50,7 +50,7 @@ module.exports = {
       if (isDir) {
         const newDir = path.join(destDir, i);
         fs.mkdirSync(newDir);
-        cloneDirectory(fixedDir, newDir);
+        this.cloneDirectory(fixedDir, newDir);
       } else {
         const newFile = path.join(destDir, i);
         fs.copyFileSync(fixedDir, newFile);
