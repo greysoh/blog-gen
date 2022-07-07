@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 const prettier = require("prettier");
 
@@ -63,12 +63,12 @@ for (i of libs.recursiveGetDirectories("out")) {
 
         const title = file
           .split("\n")[0]
-          .replace("# ", "")
-          .replace("## ", "")
           .replace("### ", "")
-          .replace("#", "")
+          .replace("## ", "")
+          .replace("# ", "")
+          .replace("###", "")
           .replace("##", "")
-          .replace("###", "");
+          .replace("#", "");
 
         let link = tocOriginal;
         
