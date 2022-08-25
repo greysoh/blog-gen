@@ -38,7 +38,7 @@ console.log(
 console.log("TableGen: Checking if there are any table of content files...");
 
 for (i of libs.recursiveGetDirectories("out")) {
-  if (j.endsWith(".md") && !j.endsWith("toc.md")) {
+  if (i.endsWith("toc.gen")) {
     console.log("TableGen: Found a request to make a table of content file.");
     console.log("TableGen: Deleting generation files...");
 
